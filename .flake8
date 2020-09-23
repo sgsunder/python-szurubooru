@@ -1,0 +1,5 @@
+[flake8]
+filename = pyszuru/
+exclude = __pycache__
+ignore = W503, W504, E203, E231
+max-line-length = 112
