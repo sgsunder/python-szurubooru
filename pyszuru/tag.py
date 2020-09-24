@@ -29,9 +29,9 @@ class Tag(Resource):
     def _serialized(self) -> Dict[str, Any]:
         ret = self._copy_new_json(["names", "category", "description", "implications", "suggestions"])
         if "implications" in ret:
-            ret["implications"] = [x.name for x in ret["implications"]]
+            ret["implications"] = [x.primary_name for x in ret["implications"]]
         if "suggestions" in ret:
-            ret["suggestions"] = [x.name for x in ret["suggestions"]]
+            ret["suggestions"] = [x.primary_name for x in ret["suggestions"]]
         return ret
 
     # Factory Methods
@@ -95,5 +95,19 @@ class Tag(Resource):
         self._generic_setter("description", val)
 
     @property
-    def name(self) -> str:
+    def primary_name(self) -> str:
         return self.names[0]
+
+    @primary_name.setter
+    def primary_name(self, val: str) -> None:
+        existing_names = self.names
+        if val in existing_names:
+            existing_names.remove(val)
+        existing_names.insert(0, val)
+        self.names = existing_names
+
+    def add_name(self, val: str) -> None:
+        existing_names = self.names
+        if val not in existing_names:
+            existing_names.append(val)
+        self.names = existing_names
