@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Callable
 
 from pyszuru.api import API
-from pyszuru.resource import Resource
+from pyszuru.resource import Resource, ResourceNotSynchronized
 
 
 class Tag(Resource):
@@ -52,6 +52,32 @@ class Tag(Resource):
         t._json_new = {"names": [name], "category": default_cat}
         t.push()
         return t
+
+    def merge_from(self, source: Tag, add_as_alias: bool) -> None:
+        """
+        Merges source tag into this tag
+        """
+        if "version" not in source._json or source._json_new:
+            raise ResourceNotSynchronized("Target tag is not synchronized")
+        if "version" not in self._json or self._json_new:
+            raise ResourceNotSynchronized("This tag is not synchronized")
+        data = self._api._call(
+            "POST",
+            ["tag-merge"],
+            body={
+                "removeVersion": source._json["version"],
+                "remove": source.primary_name,
+                "mergeToVersion": self._json["version"],
+                "mergeTo": self.primary_name,
+            },
+        )
+        self._update_json(data, force=True)
+        if add_as_alias:
+            n = self.names
+            n.extend([x for x in source._json["names"] if x not in n])
+            self.names = n
+            self.push()
+        source._json = {}
 
     # Getters and Setters
     @property

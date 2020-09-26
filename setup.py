@@ -1,11 +1,22 @@
 import setuptools
+import subprocess
+
+
+def get_git_version():
+    return subprocess.run(
+        ["git", "describe", "--abbrev=0"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pyszuru",
-    version="0.1.0",
+    version=get_git_version(),
     author="Shyam Sunder",
     author_email="sgsunder1@gmail.com",
     description="Python interface for szurubooru",

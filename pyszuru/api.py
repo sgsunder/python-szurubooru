@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 from base64 import b64encode
 import re
-from urllib.parse import urlencode, urlsplit, urlunsplit, urljoin
+from urllib.parse import urlencode, urlsplit, urlunsplit, urljoin, quote
 
 import requests
 
@@ -92,7 +92,7 @@ class API:
             raise ValueError("Username specified without authentication method")
 
     def _create_api_url(self, parts: List[str], query: Dict[str, str] = None) -> str:
-        path = [self._api_path_prefix] + [str(part).rstrip("/") for part in parts]
+        path = [self._api_path_prefix] + [quote(str(part).rstrip("/"), safe="") for part in parts]
         if query:
             path.append("")
             query = urlencode(query)
