@@ -1,6 +1,8 @@
 # pyszuru
 Python interface for szurubooru
 
+Installation: `pip install pyszuru`
+
 # Usage
 
 ### Creating API Instance
