@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Callable
 
-from pyszuru.api import API, FileToken
+from .api import API, FileToken
 
 
 class ResourceNotSynchronized(RuntimeError):

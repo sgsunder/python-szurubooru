@@ -5,10 +5,10 @@ from contextlib import nullcontext
 
 from tqdm import tqdm
 
-from pyszuru.api import API, FileToken
-from pyszuru.resource import Resource
-from pyszuru.tag import Tag
-from pyszuru.post import Post
+from .api import API, FileToken
+from .resource import Resource
+from .tag import Tag
+from .post import Post
 
 
 SearchResult = namedtuple("SearchResult", ["post", "distance", "exact"], defaults=[False])

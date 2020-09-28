@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Callable
 
-from pyszuru.api import API, FileToken
-from pyszuru.resource import Resource
-from pyszuru.tag import Tag
+from .api import API, FileToken
+from .resource import Resource
+from .tag import Tag
 
 
 class Post(Resource):

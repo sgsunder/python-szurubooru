@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Callable
 
-from pyszuru.api import API
-from pyszuru.resource import Resource, ResourceNotSynchronized
+from .api import API
+from .resource import Resource, ResourceNotSynchronized
 
 
 class Tag(Resource):
