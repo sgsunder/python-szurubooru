@@ -1,9 +1,13 @@
+from __future__ import annotations
 from typing import Any, Dict, List
 
 from base64 import b64encode
+import json
+import os
 import re
 from urllib.parse import urlencode, urlsplit, urlunsplit, urljoin, quote
 
+from appdirs import user_data_dir
 import requests
 
 
@@ -121,3 +125,23 @@ class API:
     def _create_data_url(self, rel_url: str) -> str:
         base_url = urlunsplit((self._url_scheme, self._url_netloc, self._url_path_prefix, None, None))
         return urljoin(base_url, rel_url)
+
+    @classmethod
+    def save_to_config(cls, config_name: str, **constructor_args) -> None:
+        if not config_name.isalnum():
+            raise ValueError("config_name must be alphanumeric")
+        pathdir = user_data_dir(appname="pyszuru", appauthor=False, roaming=False)
+        os.makedirs(pathdir, exist_ok=True)
+        path = os.path.join(pathdir, f"{config_name}.json")
+        with open(path, "w") as f:
+            json.dump(constructor_args, f)
+
+    @classmethod
+    def load_from_config(cls, config_name: str) -> API:
+        if not config_name.isalnum():
+            raise ValueError("config_name must be alphanumeric")
+        pathdir = user_data_dir(appname="pyszuru", appauthor=False, roaming=False)
+        path = os.path.join(pathdir, f"{config_name}.json")
+        with open(path, "r") as f:
+            constructor_args = json.load(f)
+        return cls(**constructor_args)
