@@ -14,6 +14,9 @@ def get_git_version():
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("requirements.txt", "r") as fh:
+    requirements = [line.strip() for line in fh.readlines()]
+
 setuptools.setup(
     name="pyszuru",
     version=get_git_version(),
@@ -29,5 +32,10 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
+    install_requires=requirements,
     python_requires=">=3.8",
+    keywords=[
+        "szurubooru",
+        "booru",
+    ],
 )

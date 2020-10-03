@@ -38,7 +38,14 @@ repos:
         always_run: true
         pass_filenames: false
         stages: [push]
-        # to upload package: `python3.8 -m twine upload dist/*`
+
+    -   id: twine
+        name: upload package
+        entry: bash -c 'twine upload --username sgsunder --password ${TWINE_PASSWORD} --skip-existing --non-interactive dist/*'
+        language: system
+        always_run: true
+        pass_filenames: false
+        stages: [push]
 
 fail_fast: true
 exclude: LICENSE.md
