@@ -80,19 +80,19 @@ class API:
 
         # Extract Auth Info
         self._api_headers = {"Accept": "application/json"}
-        username = username or parsed_api_url.username or parsed_base_url.username
+        self.username = username or parsed_api_url.username or parsed_base_url.username or None
         password = password or parsed_api_url.password or parsed_base_url.password
         if token:
-            if not username:
+            if not self.username:
                 raise ValueError("Token authentication specified without username")
             if not self._token_checker.match(token):
                 raise ValueError("Malformed Token String")
-            self._api_headers["Authorization"] = f"Token {self._encode_auth_headers(username, token)}"
+            self._api_headers["Authorization"] = f"Token {self._encode_auth_headers(self.username, token)}"
         elif password:
-            if not username:
+            if not self.username:
                 raise ValueError("Password authentication specified without username")
-            self._api_headers["Authorization"] = f"Basic {self._encode_auth_headers(username, password)}"
-        elif username:
+            self._api_headers["Authorization"] = f"Basic {self._encode_auth_headers(self.username, password)}"
+        elif self.username:
             raise ValueError("Username specified without authentication method")
 
     def _create_api_url(self, parts: List[str], query: Dict[str, str] = None) -> str:
