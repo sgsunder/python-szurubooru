@@ -34,7 +34,15 @@ class Post(Resource):
 
     def _serialized(self) -> Dict[str, Any]:
         ret = self._copy_new_json(
-            ["tags", "safety", "source", "relations", "flags", "contentToken", "thumbnailToken"]
+            [
+                "tags",
+                "safety",
+                "source",
+                "relations",
+                "flags",
+                "contentToken",
+                "thumbnailToken",
+            ]
         )
         if "tags" in ret:
             ret["tags"] = [tag["names"][0] for tag in ret["tags"]]

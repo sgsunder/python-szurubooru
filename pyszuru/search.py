@@ -57,8 +57,15 @@ def search_post(
 
 
 def search_by_image(api: API, image: FileToken) -> List[SearchResult]:
-    result = api._call("POST", ["posts", "reverse-search"], body={"contentToken": image.token})
-    ret = [SearchResult(post=Post(api, x["post"]), distance=x["distance"]) for x in result["similarPosts"]]
+    result = api._call(
+        "POST", ["posts", "reverse-search"], body={"contentToken": image.token}
+    )
+    ret = [
+        SearchResult(post=Post(api, x["post"]), distance=x["distance"])
+        for x in result["similarPosts"]
+    ]
     if result["exactPost"]:
-        ret.insert(0, SearchResult(post=Post(api, result["exactPost"]), distance=None, exact=True))
+        ret.insert(
+            0, SearchResult(post=Post(api, result["exactPost"]), distance=None, exact=True)
+        )
     return ret

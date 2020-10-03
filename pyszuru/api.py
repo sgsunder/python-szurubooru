@@ -33,7 +33,9 @@ class SzurubooruHTTPError(requests.exceptions.HTTPError):
 
 
 class API:
-    _token_checker = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+    _token_checker = re.compile(
+        r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    )
 
     @staticmethod
     def _encode_auth_headers(u: str, p: str) -> str:
@@ -76,39 +78,55 @@ class API:
         if parsed_api_url.path.startswith("/") or self._api_netloc != self._url_netloc:
             self._api_path_prefix = parsed_api_url.path.rstrip("/")
         else:
-            self._api_path_prefix = f"{self._url_path_prefix}/{parsed_api_url.path}".rstrip("/")
+            self._api_path_prefix = f"{self._url_path_prefix}/{parsed_api_url.path}".rstrip(
+                "/"
+            )
 
         # Extract Auth Info
         self._api_headers = {"Accept": "application/json"}
-        self.username = username or parsed_api_url.username or parsed_base_url.username or None
+        self.username = (
+            username or parsed_api_url.username or parsed_base_url.username or None
+        )
         password = password or parsed_api_url.password or parsed_base_url.password
         if token:
             if not self.username:
                 raise ValueError("Token authentication specified without username")
             if not self._token_checker.match(token):
                 raise ValueError("Malformed Token String")
-            self._api_headers["Authorization"] = f"Token {self._encode_auth_headers(self.username, token)}"
+            self._api_headers[
+                "Authorization"
+            ] = f"Token {self._encode_auth_headers(self.username, token)}"
         elif password:
             if not self.username:
                 raise ValueError("Password authentication specified without username")
-            self._api_headers["Authorization"] = f"Basic {self._encode_auth_headers(self.username, password)}"
+            self._api_headers[
+                "Authorization"
+            ] = f"Basic {self._encode_auth_headers(self.username, password)}"
         elif self.username:
             raise ValueError("Username specified without authentication method")
 
     def _create_api_url(self, parts: List[str], query: Dict[str, str] = None) -> str:
-        path = [self._api_path_prefix] + [quote(str(part).rstrip("/"), safe="") for part in parts]
+        path = [self._api_path_prefix] + [
+            quote(str(part).rstrip("/"), safe="") for part in parts
+        ]
         if query:
             path.append("")
             query = urlencode(query)
         return urlunsplit((self._api_scheme, self._api_netloc, "/".join(path), query, None))
 
     def _call(
-        self, method: str, urlparts: List[str], urlquery: Dict[str, str] = None, body: Dict[str, Any] = None
+        self,
+        method: str,
+        urlparts: List[str],
+        urlquery: Dict[str, str] = None,
+        body: Dict[str, Any] = None,
     ) -> Dict[str, Any]:
         req_kwargs = {"headers": self._api_headers}
         if body:
             req_kwargs["json"] = body
-        response = requests.request(method, self._create_api_url(urlparts, urlquery), **req_kwargs)
+        response = requests.request(
+            method, self._create_api_url(urlparts, urlquery), **req_kwargs
+        )
         self._check_api_response(response)
         return response.json()
 
@@ -123,7 +141,9 @@ class API:
         return FileToken(response.json()["token"], filepath)
 
     def _create_data_url(self, rel_url: str) -> str:
-        base_url = urlunsplit((self._url_scheme, self._url_netloc, self._url_path_prefix, None, None))
+        base_url = urlunsplit(
+            (self._url_scheme, self._url_netloc, self._url_path_prefix, None, None)
+        )
         return urljoin(base_url, rel_url)
 
     @classmethod

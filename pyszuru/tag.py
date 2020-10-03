@@ -27,7 +27,9 @@ class Tag(Resource):
         }
 
     def _serialized(self) -> Dict[str, Any]:
-        ret = self._copy_new_json(["names", "category", "description", "implications", "suggestions"])
+        ret = self._copy_new_json(
+            ["names", "category", "description", "implications", "suggestions"]
+        )
         if "implications" in ret:
             ret["implications"] = [x.primary_name for x in ret["implications"]]
         if "suggestions" in ret:
@@ -44,7 +46,11 @@ class Tag(Resource):
     @classmethod
     def new(cls, api: API, name: str) -> Tag:
         # Get default tag category
-        tag_cats = [x["name"] for x in api._call("GET", ["tag-categories"])["results"] if x["default"]]
+        tag_cats = [
+            x["name"]
+            for x in api._call("GET", ["tag-categories"])["results"]
+            if x["default"]
+        ]
         assert len(tag_cats) == 1
         default_cat = tag_cats[0]
         # Create and return tag

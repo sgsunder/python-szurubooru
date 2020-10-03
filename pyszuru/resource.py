@@ -73,11 +73,15 @@ class Resource:
         self._update_json(data, force=True)
 
     @classmethod
-    def _apply_transforms(cls, transforms: Dict[str, Callable], property_name: str, property_value: Any) -> Any:
+    def _apply_transforms(
+        cls, transforms: Dict[str, Callable], property_name: str, property_value: Any
+    ) -> Any:
         if property_value is None:
             return None
         elif isinstance(property_value, list):
-            return [cls._apply_transforms(transforms, property_name, x) for x in property_value]
+            return [
+                cls._apply_transforms(transforms, property_name, x) for x in property_value
+            ]
         elif property_name in transforms:
             return transforms[property_name](property_value)
         else:
@@ -89,18 +93,24 @@ class Resource:
                 self._getter_transforms(), property_name, self._json_new[property_name]
             )
         elif property_name in self._json:
-            return self._apply_transforms(self._getter_transforms(), property_name, self._json[property_name])
+            return self._apply_transforms(
+                self._getter_transforms(), property_name, self._json[property_name]
+            )
         elif dynamic_refresh:
             self.pull()
             return self._generic_getter(property_name, False)
         else:
             raise KeyError(f"{property_name} is not present in the JSON response")
 
-    def _generic_setter(self, property_name: str, property_value: Any, dynamic_refresh: bool = True) -> None:
+    def _generic_setter(
+        self, property_name: str, property_value: Any, dynamic_refresh: bool = True
+    ) -> None:
         if property_name in self._json:
             if isinstance(self._json[property_name], list):
                 if not isinstance(property_value, list):
-                    raise ValueError(f"{property_name} must be a list, not {type(property_value)}")
+                    raise ValueError(
+                        f"{property_name} must be a list, not {type(property_value)}"
+                    )
             self._json_new[property_name] = self._apply_transforms(
                 self._setter_transforms(), property_name, property_value
             )
