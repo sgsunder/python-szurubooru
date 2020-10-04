@@ -89,7 +89,7 @@ class Post(Resource):
 
     @property
     def source(self) -> List[str]:
-        return self._generic_getter("source").splitlines()
+        return (self._generic_getter("source") or "").splitlines()
 
     @source.setter
     def source(self, val: List[str]) -> None:
