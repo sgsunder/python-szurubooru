@@ -38,8 +38,8 @@ class Tag(Resource):
 
     # Factory Methods
     @classmethod
-    def from_name(cls, api: API, name: str) -> Tag:
-        t = cls(api, {"names": [name]})
+    def from_id(cls, api: API, id_: str) -> Tag:
+        t = cls(api, {"names": [id_]})
         t.pull()
         return t
 

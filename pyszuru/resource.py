@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Any, Dict, List, Callable
 
 from .api import API, FileToken
@@ -59,11 +60,11 @@ class Resource:
         self._json_new = {}
         self._json = data
 
-    def pull(self):
+    def pull(self) -> None:
         data = self._api._call("GET", self._get_instance_urlparts())
         self._update_json(data)
 
-    def push(self):
+    def push(self) -> None:
         body = self._serialized()
         if "version" in self._json and self._json["version"]:
             body["version"] = self._json["version"]
@@ -71,6 +72,21 @@ class Resource:
         else:
             data = self._api._call("POST", self._get_class_urlparts(), body=body)
         self._update_json(data, force=True)
+
+    def synchronized(self) -> bool:
+        return bool(self._json_new)
+
+    @classmethod
+    def from_id(cls, api: API, id_: Any) -> Resource:
+        raise NotImplementedError()
+
+    @classmethod
+    def new(cls, api: API, *args, **kwargs) -> Resource:
+        raise NotImplementedError()
+
+    @property
+    def api(self):
+        return self._api
 
     @classmethod
     def _apply_transforms(
