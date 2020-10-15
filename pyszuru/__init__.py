@@ -2,5 +2,5 @@
 from .api import API, FileToken, SzurubooruHTTPError
 from .resource import Resource, ResourceNotSynchronized
 from .tag import Tag
-from .post import Post
+from .post import Post, PostNote
 from .search import search_tag, search_post, search_by_image, SearchResult

@@ -1,9 +1,31 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Callable
 
+from collections import namedtuple
+
 from .api import API, FileToken
 from .resource import Resource
 from .tag import Tag
+
+
+class PostNote:
+    Point = namedtuple("PostNotePoint", ["x", "y"])
+
+    def __init__(self, polygon: List[List[float]], text: str):
+        self._points = [PostNote.Point(*x) for x in polygon]
+        self._text = text
+
+    @property
+    def points(self) -> List[PostNote.Point]:
+        return self._points
+
+    @property
+    def text(self) -> str:
+        return self._text
+
+    @property
+    def json(self):
+        return {"polygon": [list(p) for p in self._points], "text": self._text}
 
 
 class Post(Resource):
@@ -42,6 +64,7 @@ class Post(Resource):
                 "flags",
                 "contentToken",
                 "thumbnailToken",
+                "notes",
             ]
         )
         if "tags" in ret:
@@ -169,6 +192,14 @@ class Post(Resource):
     @loop.setter
     def loop(self, val: bool) -> None:
         self._flag_setter("loop", val)
+
+    @property
+    def notes(self):
+        return [PostNote(**note) for note in self._generic_getter("notes")]
+
+    @notes.setter
+    def notes(self, val: List[PostNote]):
+        self._generic_setter("notes", [x.json for x in val])
 
     @property
     def sound(self) -> bool:
