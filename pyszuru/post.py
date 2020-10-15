@@ -136,6 +136,10 @@ class Post(Resource):
         return self._generic_getter("mimeType")
 
     @property
+    def checksum(self):
+        return self._generic_getter("checksum")
+
+    @property
     def width(self) -> int:
         return self._generic_getter("canvasWidth")
 
