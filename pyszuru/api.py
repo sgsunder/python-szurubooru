@@ -5,7 +5,7 @@ from base64 import b64encode
 import json
 import os
 import re
-from urllib.parse import urlencode, urlsplit, urlunsplit, urljoin, quote
+import urllib.parse
 
 from appdirs import user_data_dir
 import requests
@@ -60,7 +60,7 @@ class API:
         api_url: str = "api",
     ):
         # Extract Base URL parts
-        parsed_base_url = urlsplit(base_url)
+        parsed_base_url = urllib.parse.urlsplit(base_url)
         self._url_scheme = parsed_base_url.scheme
         self._url_netloc = parsed_base_url.netloc
         if not (self._url_scheme and self._url_netloc):
@@ -70,7 +70,7 @@ class API:
         self._url_path_prefix = parsed_base_url.path.rstrip("/")
 
         # Extract API URL parts
-        parsed_api_url = urlsplit(api_url)
+        parsed_api_url = urllib.parse.urlsplit(api_url)
         self._api_scheme = parsed_api_url.scheme or self._url_scheme
         self._api_netloc = parsed_api_url.netloc or self._url_netloc
         if self._api_scheme not in ("http", "https"):
@@ -107,12 +107,14 @@ class API:
 
     def _create_api_url(self, parts: List[str], query: Dict[str, str] = None) -> str:
         path = [self._api_path_prefix] + [
-            quote(str(part).rstrip("/"), safe="") for part in parts
+            urllib.parse.quote(str(part).rstrip("/"), safe="") for part in parts
         ]
         if query:
             path.append("")
-            query = urlencode(query)
-        return urlunsplit((self._api_scheme, self._api_netloc, "/".join(path), query, None))
+            query = urllib.parse.urlencode(query)
+        return urllib.parse.urlunsplit(
+            (self._api_scheme, self._api_netloc, "/".join(path), query, None)
+        )
 
     def _call(
         self,
@@ -140,11 +142,26 @@ class API:
         self._check_api_response(response)
         return FileToken(response.json()["token"], filepath)
 
-    def _create_data_url(self, rel_url: str) -> str:
-        base_url = urlunsplit(
-            (self._url_scheme, self._url_netloc, self._url_path_prefix, None, None)
-        )
-        return urljoin(base_url, rel_url)
+    def _create_data_url(self, rel_url: str, override_base: bool = True) -> str:
+        if override_base:
+            base_path = os.path.join("/", self._url_path_prefix)
+            rel_path = urllib.parse.urlsplit(rel_url).path
+            return urllib.parse.urlunsplit(
+                (
+                    self._url_scheme,
+                    self._url_netloc,
+                    os.path.join(base_path, rel_path),
+                    None,
+                    None,
+                )
+            )
+        else:
+            return urllib.parse.urljoin(
+                urllib.parse.urlunsplit(
+                    (self._url_scheme, self._url_netloc, self._url_path_prefix, None, None)
+                ),
+                rel_url,
+            )
 
     @classmethod
     def save_to_config(cls, config_name: str, **constructor_args) -> None:
