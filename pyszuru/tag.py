@@ -31,9 +31,9 @@ class Tag(Resource):
             ["names", "category", "description", "implications", "suggestions"]
         )
         if "implications" in ret:
-            ret["implications"] = [x.primary_name for x in ret["implications"]]
+            ret["implications"] = [x["names"][0] for x in ret["implications"]]
         if "suggestions" in ret:
-            ret["suggestions"] = [x.primary_name for x in ret["suggestions"]]
+            ret["suggestions"] = [x["names"][0] for x in ret["suggestions"]]
         return ret
 
     # Factory Methods
