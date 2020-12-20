@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Dict, List
+from typing import Any, Union, Dict, List, BinaryIO
 
 from base64 import b64encode
 import json
@@ -132,15 +132,19 @@ class API:
         self._check_api_response(response)
         return response.json()
 
-    def upload_file(self, filepath: str) -> FileToken:
-        with open(filepath, "rb") as file:
-            response = requests.post(
-                self._create_api_url(["uploads"]),
-                files={"content": file},
-                headers=self._api_headers,
-            )
+    def upload_file(self, file: Union[BinaryIO, str]) -> FileToken:
+        if isinstance(file, str):
+            with open(file, "rb") as f:
+                return self.upload_file(f)
+        response = requests.post(
+            self._create_api_url(["uploads"]),
+            files={"content": file},
+            headers=self._api_headers,
+        )
         self._check_api_response(response)
-        return FileToken(response.json()["token"], filepath)
+        return FileToken(
+            response.json()["token"], file.name if hasattr(file, "name") else None
+        )
 
     def _create_data_url(self, rel_url: str, override_base: bool = True) -> str:
         if override_base:
