@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Callable
+import warnings
 
 from .api import API
 from .resource import Resource, ResourceNotSynchronized
@@ -39,12 +40,18 @@ class Tag(Resource):
     # Factory Methods
     @classmethod
     def from_id(cls, api: API, id_: str) -> Tag:
+        warnings.warn(
+            "Tag.from_id() is deprecated, use API.getTag() instead", DeprecationWarning
+        )
         t = cls(api, {"names": [id_]})
         t.pull()
         return t
 
     @classmethod
     def new(cls, api: API, name: str) -> Tag:
+        warnings.warn(
+            "Tag.new() is deprecated, use API.createTag() instead", DeprecationWarning
+        )
         # Get default tag category
         tag_cats = [
             x["name"]

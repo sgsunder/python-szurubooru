@@ -3,3 +3,4 @@ filename = pyszuru/
 exclude = __pycache__
 ignore = W503, W504, E203, E231
 max-line-length = 92
+per-file-ignores = pyszuru/__init__.py:F401

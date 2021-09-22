@@ -1,4 +1,5 @@
 from typing import List, Generator
+import warnings
 
 from collections import namedtuple
 from contextlib import nullcontext
@@ -47,16 +48,26 @@ def _search_generic(
 def search_tag(
     api: API, search_query: str, page_size: int = 20, show_progress_bar: bool = False
 ) -> Generator[Tag, None, None]:
+    warnings.warn(
+        "search_tag() is deprecated, use API.search_tag() instead", DeprecationWarning
+    )
     return _search_generic(api, search_query, Tag, page_size, show_progress_bar)
 
 
 def search_post(
     api: API, search_query: str, page_size: int = 20, show_progress_bar: bool = False
 ) -> Generator[Post, None, None]:
+    warnings.warn(
+        "search_post() is deprecated, use API.search_post() instead", DeprecationWarning
+    )
     return _search_generic(api, search_query, Post, page_size, show_progress_bar)
 
 
 def search_by_image(api: API, image: FileToken) -> List[SearchResult]:
+    warnings.warn(
+        "search_by_image() is deprecated, use API.search_by_image() instead",
+        DeprecationWarning,
+    )
     result = api._call(
         "POST", ["posts", "reverse-search"], body={"contentToken": image.token}
     )

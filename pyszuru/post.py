@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Callable
+import warnings
 
 from collections import namedtuple
 
@@ -76,12 +77,18 @@ class Post(Resource):
     # Factory Methods
     @classmethod
     def from_id(cls, api: API, id_: int) -> Post:
+        warnings.warn(
+            "Post.from_id() is deprecated, use API.getPost() instead", DeprecationWarning
+        )
         p = cls(api, {"id": id_})
         p.pull()
         return p
 
     @classmethod
     def new(cls, api: API, content: FileToken, safety: str) -> Post:
+        warnings.warn(
+            "Post.new() is deprecated, use API.createPost() instead", DeprecationWarning
+        )
         cls._validate_safety(safety)
         p = cls(api, {})
         p._json_new = {
