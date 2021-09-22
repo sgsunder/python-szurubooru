@@ -186,3 +186,6 @@ class API:
         with open(path, "r") as f:
             constructor_args = json.load(f)
         return cls(**constructor_args)
+
+    def __str__(self) -> str:
+        return f"Szurubooru API for {self.username} at {self._api_netloc}"

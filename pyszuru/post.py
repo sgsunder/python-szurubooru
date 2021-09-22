@@ -215,3 +215,9 @@ class Post(Resource):
     @sound.setter
     def sound(self, val: bool) -> None:
         self._flag_setter("sound", val)
+
+    def __str__(self) -> str:
+        return f"Post {self.id_}"
+
+    def __repr__(self) -> str:
+        return f"{self._api!r}.<Post of id {self.id_}>"

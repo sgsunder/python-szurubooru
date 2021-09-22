@@ -150,3 +150,9 @@ class Tag(Resource):
         if val not in existing_names:
             existing_names.append(val)
         self.names = existing_names
+
+    def __str__(self) -> str:
+        return self.primary_name
+
+    def __repr__(self) -> str:
+        return f"{self._api!r}.<Tag of name '{self.primary_name}'>"
