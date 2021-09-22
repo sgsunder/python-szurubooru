@@ -29,23 +29,5 @@ repos:
         -   flake8-print
         args: ['--config=.flake8']
 
--   repo: local
-    hooks:
-    -   id: pypi-package
-        name: create package
-        entry: /usr/local/bin/python3.8 setup.py sdist bdist_wheel
-        language: system
-        always_run: true
-        pass_filenames: false
-        stages: [push]
-
-    -   id: twine
-        name: upload package
-        entry: bash -c 'twine upload --username sgsunder --password ${TWINE_PASSWORD} --skip-existing --non-interactive dist/*'
-        language: system
-        always_run: true
-        pass_filenames: false
-        stages: [push]
-
 fail_fast: true
 exclude: LICENSE.md
