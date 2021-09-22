@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Callable
+from typing import Any, Union, Dict, List, Callable
 import warnings
 
 from collections import namedtuple
@@ -34,6 +34,11 @@ class Post(Resource):
     def _validate_safety(safety: str) -> None:
         if safety not in ("safe", "sketchy", "unsafe"):
             raise ValueError("Safety must be of value safe, sketchy, or unsafe")
+
+    def _str_to_tag(self, val: str) -> Tag:
+        t = Tag(self._api, {"names": [val]})
+        t.pull()
+        return t
 
     # Implementing Abstract Methods
     def _get_instance_urlparts(self) -> List[str]:
@@ -130,8 +135,10 @@ class Post(Resource):
         return self._generic_getter("tags")
 
     @tags.setter
-    def tags(self, val: List[Tag]) -> None:
-        self._generic_setter("tags", val)
+    def tags(self, val: List[Union[Tag, str]]) -> None:
+        self._generic_setter(
+            "tags", [self._str_to_tag(x) if isinstance(x, str) else x for x in val]
+        )
 
     @property
     def relations(self) -> List[Post]:
