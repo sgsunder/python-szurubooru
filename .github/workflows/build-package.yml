@@ -1,5 +1,8 @@
 name: Build and push PyPI package
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 jobs:
   build-client:
     runs-on: ubuntu-latest
