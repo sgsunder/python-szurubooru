@@ -5,8 +5,8 @@ import subprocess
 def get_git_version():
     return subprocess.run(
         ["git", "describe", "--abbrev=0"],
-        capture_output=True,
-        text=True,
+        stdout=subprocess.PIPE,
+        universal_newlines=True,
         check=True,
     ).stdout.strip()
 
@@ -33,7 +33,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=requirements,
-    python_requires=">=3.8",
+    python_requires=">=3.6",
     keywords=[
         "szurubooru",
         "booru",

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Any, Dict, List, Callable
 import warnings
 
@@ -39,7 +38,7 @@ class Tag(Resource):
 
     # Factory Methods
     @classmethod
-    def from_id(cls, api: API, id_: str) -> Tag:
+    def from_id(cls, api: API, id_: str):  # -> Tag
         warnings.warn(
             "Tag.from_id() is deprecated, use API.getTag() instead", DeprecationWarning
         )
@@ -48,7 +47,7 @@ class Tag(Resource):
         return t
 
     @classmethod
-    def new(cls, api: API, name: str) -> Tag:
+    def new(cls, api: API, name: str):  # -> Tag
         warnings.warn(
             "Tag.new() is deprecated, use API.createTag() instead", DeprecationWarning
         )
@@ -66,7 +65,7 @@ class Tag(Resource):
         t.push()
         return t
 
-    def merge_from(self, source: Tag, add_as_alias: bool) -> None:
+    def merge_from(self, source, add_as_alias: bool) -> None:  # source: Tag
         """
         Merges source tag into this tag
         """
@@ -110,19 +109,19 @@ class Tag(Resource):
         self._generic_setter("category", val)
 
     @property
-    def implications(self) -> List[Tag]:
+    def implications(self):  # -> List[Tag]
         return self._generic_getter("implications")
 
     @implications.setter
-    def implications(self, val: List[Tag]) -> None:
+    def implications(self, val: List) -> None:  # val: List[Tag]
         self._generic_setter("implications", val)
 
     @property
-    def suggestions(self) -> List[Tag]:
+    def suggestions(self):  # -> List[Tag]
         return self._generic_getter("suggestions")
 
     @suggestions.setter
-    def suggestions(self, val: List[Tag]) -> None:
+    def suggestions(self, val: List) -> None:  # val: List[Tag]
         self._generic_setter("suggestions", val)
 
     @property

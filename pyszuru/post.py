@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Any, Union, Dict, List, Callable
 import warnings
 
@@ -17,7 +16,7 @@ class PostNote:
         self._text = text
 
     @property
-    def points(self) -> List[PostNote.Point]:
+    def points(self) -> List:  # -> List[PostNote.Point]
         return self._points
 
     @property
@@ -81,7 +80,7 @@ class Post(Resource):
 
     # Factory Methods
     @classmethod
-    def from_id(cls, api: API, id_: int) -> Post:
+    def from_id(cls, api: API, id_: int):  # -> Post
         warnings.warn(
             "Post.from_id() is deprecated, use API.getPost() instead", DeprecationWarning
         )
@@ -90,7 +89,7 @@ class Post(Resource):
         return p
 
     @classmethod
-    def new(cls, api: API, content: FileToken, safety: str) -> Post:
+    def new(cls, api: API, content: FileToken, safety: str):  # -> Post
         warnings.warn(
             "Post.new() is deprecated, use API.createPost() instead", DeprecationWarning
         )
@@ -141,11 +140,11 @@ class Post(Resource):
         )
 
     @property
-    def relations(self) -> List[Post]:
+    def relations(self) -> List:  # -> List[Post]
         return self._generic_getter("relations")
 
     @relations.setter
-    def relations(self, val: List[Post]) -> None:
+    def relations(self, val: List) -> None:  # val: List[Post]
         self._generic_setter("relations", val)
 
     @property

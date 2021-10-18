@@ -9,7 +9,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.6'
       - run: pip3 install wheel
       - run: python3 setup.py sdist bdist_wheel
       - uses: pypa/gh-action-pypi-publish@release/v1

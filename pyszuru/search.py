@@ -2,7 +2,6 @@ from typing import List, Generator
 import warnings
 
 from collections import namedtuple
-from contextlib import nullcontext
 
 from tqdm import tqdm
 
@@ -12,7 +11,19 @@ from .tag import Tag
 from .post import Post
 
 
-SearchResult = namedtuple("SearchResult", ["post", "distance", "exact"], defaults=[False])
+SearchResult = namedtuple("SearchResult", ["post", "distance", "exact"])
+
+
+# https://stackoverflow.com/a/45187287/13027787
+class _NullContextManager(object):
+    def __init__(self, dummy_resource=None):
+        self.dummy_resource = dummy_resource
+
+    def __enter__(self):
+        return self.dummy_resource
+
+    def __exit__(self, *args):
+        pass
 
 
 def _search_generic(
@@ -24,7 +35,7 @@ def _search_generic(
 ) -> Generator[Resource, None, None]:
     offset = 0
     total = None
-    with (tqdm() if show_progress_bar else nullcontext()) as pbar:
+    with (tqdm() if show_progress_bar else _NullContextManager()) as pbar:
         while True:
             page = api._call(
                 "GET",
@@ -72,7 +83,7 @@ def search_by_image(api: API, image: FileToken) -> List[SearchResult]:
         "POST", ["posts", "reverse-search"], body={"contentToken": image.token}
     )
     ret = [
-        SearchResult(post=Post(api, x["post"]), distance=x["distance"])
+        SearchResult(post=Post(api, x["post"]), distance=x["distance"], exact=False)
         for x in result["similarPosts"]
     ]
     if result["exactPost"]:

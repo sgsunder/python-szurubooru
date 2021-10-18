@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Any, Union, Dict, List, BinaryIO
 
 from base64 import b64encode
@@ -178,7 +177,7 @@ class API:
             json.dump(constructor_args, f)
 
     @classmethod
-    def load_from_config(cls, config_name: str) -> API:
+    def load_from_config(cls, config_name: str):  # -> API:
         if not config_name.isalnum():
             raise ValueError("config_name must be alphanumeric")
         pathdir = user_data_dir(appname="pyszuru", appauthor=False, roaming=False)

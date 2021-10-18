@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List, Generator
 
 from .api import API as _API, FileToken, SzurubooruHTTPError
