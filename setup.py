@@ -1,8 +1,14 @@
+import os
+import re
 import setuptools
 import subprocess
 
 
-def get_git_version():
+def get_version():
+    if "GITHUB_REF" in os.environ:
+        m = re.match(r"refs\/tags\/([\d\.]+)", os.environ["GITHUB_REF"])
+        if m:
+            return m.group(1)
     return subprocess.run(
         ["git", "describe", "--abbrev=0"],
         stdout=subprocess.PIPE,
@@ -19,7 +25,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="pyszuru",
-    version=get_git_version(),
+    version=get_version(),
     author="Shyam Sunder",
     author_email="sgsunder1@gmail.com",
     description="Python interface for szurubooru",
