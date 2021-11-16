@@ -59,7 +59,7 @@ class API(_API):
             "POST", ["posts", "reverse-search"], body={"contentToken": image.token}
         )
         ret = [
-            SearchResult(post=Post(self, x["post"]), distance=x["distance"])
+            SearchResult(post=Post(self, x["post"]), distance=x["distance"], exact=False)
             for x in result["similarPosts"]
         ]
         if result["exactPost"]:
