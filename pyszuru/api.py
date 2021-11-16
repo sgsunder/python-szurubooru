@@ -106,7 +106,7 @@ class API:
 
     def _create_api_url(self, parts: List[str], query: Dict[str, str] = None) -> str:
         path = [self._api_path_prefix] + [
-            urllib.parse.quote(str(part).rstrip("/"), safe="") for part in parts
+            urllib.parse.quote(str(part), safe="") for part in parts
         ]
         if query:
             path.append("")
