@@ -59,7 +59,7 @@ with open("image.jpg", "rb") as f:
 my_new_post = mybooru.createPost(file_token, "safe")
 ```
 
-#### Alter propeties of a tag
+#### Alter tags of a post
 ```python
 my_new_post.tags = [marvel_comics_tag, spiderman_tag]
 my_new_post.push()
@@ -69,12 +69,12 @@ my_new_post.push()
 
 #### Searching across tags
 ```python
-unused_tags = mybooru.search_posts("usages:0")
+unused_tags = mybooru.search_tag("usages:0")
 ```
 
 #### Searching across posts
 ```python
-for post in mybooru.search_posts(
+for post in mybooru.search_post(
     "marvel_comics type:image special:fav", show_progress_bar=True
 ):
     wget.download(post.content)
