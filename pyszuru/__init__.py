@@ -45,14 +45,16 @@ class API(_API):
         return t
 
     def search_tag(  # noqa: F811
-        self, search_query: str, page_size: int = 20, show_progress_bar: bool = False
+        self, search_query: str, page_size: int = 20, fields: List[str] = None,
+        show_progress_bar: bool = False
     ) -> Generator[Tag, None, None]:
-        return _search_generic(self, search_query, Tag, page_size, show_progress_bar)
+        return _search_generic(self, search_query, Tag, page_size, fields, show_progress_bar)
 
     def search_post(  # noqa: F811
-        self, search_query: str, page_size: int = 20, show_progress_bar: bool = False
+        self, search_query: str, page_size: int = 20, fields: List[str] = None,
+        show_progress_bar: bool = False
     ) -> Generator[Post, None, None]:
-        return _search_generic(self, search_query, Post, page_size, show_progress_bar)
+        return _search_generic(self, search_query, Post, page_size, fields, show_progress_bar)
 
     def search_by_image(self, image: FileToken) -> List[SearchResult]:  # noqa: F811
         result = self._call(
