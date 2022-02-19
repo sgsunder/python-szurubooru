@@ -47,6 +47,10 @@ class Post(Resource):
     def _get_class_urlparts(cls) -> List[str]:
         return ["posts"]
 
+    @classmethod
+    def _lazy_load_components(cls) -> List[str]:
+        return ["id", "safety", "type", "contentUrl", "flags", "tags", "relations"]
+
     def _setter_transforms(self) -> Dict[str, Callable]:
         return {
             "tags": lambda x: {"names": x.names, "category": x.category},

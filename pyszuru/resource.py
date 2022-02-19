@@ -23,6 +23,11 @@ class Resource:
         """URL Parts Generator for this class"""
         raise NotImplementedError()
 
+    @classmethod
+    def _lazy_load_components(cls) -> List[str]:
+        """Core lazy load fields generator for this class"""
+        raise NotImplementedError()
+
     def _setter_transforms(self) -> Dict[str, Callable]:
         """Converts set value to JSON-serializable dictionary"""
         return {}

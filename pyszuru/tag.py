@@ -14,6 +14,10 @@ class Tag(Resource):
     def _get_class_urlparts(cls) -> List[str]:
         return ["tags"]
 
+    @classmethod
+    def _lazy_load_components(cls) -> List[str]:
+        return ["names", "category", "usages"]
+
     def _setter_transforms(self) -> Dict[str, Callable]:
         return {
             "implications": lambda x: {"names": x.names, "category": x.category},

@@ -32,15 +32,19 @@ def _search_generic(
     transforming_class: type,
     page_size: int,
     show_progress_bar: bool = False,
+    eager_load: bool = False,
 ) -> Generator[Resource, None, None]:
     offset = 0
     total = None
     with (tqdm() if show_progress_bar else _NullContextManager()) as pbar:
         while True:
+            urlquery = {"offset": offset, "limit": page_size, "query": search_query}
+            if not eager_load:
+                urlquery["fields"] = ",".join(transforming_class._lazy_load_components())
             page = api._call(
                 "GET",
                 transforming_class._get_class_urlparts(),
-                urlquery={"offset": offset, "limit": page_size, "query": search_query},
+                urlquery=urlquery,
             )
             offset = offset + len(page["results"])
             if page["total"] != total:
