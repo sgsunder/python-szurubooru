@@ -4,7 +4,7 @@ import warnings
 from collections import namedtuple
 
 from .api import API, FileToken
-from .resource import Resource
+from .resource import Resource, _ResourceList
 from .tag import Tag
 
 
@@ -127,7 +127,11 @@ class Post(Resource):
 
     @property
     def source(self) -> List[str]:
-        return (self._generic_getter("source") or "").splitlines()
+        return _ResourceList(
+            getter=lambda: (self._generic_getter("source") or "").splitlines(),
+            parent_resource=self,
+            property_name="source",
+        )
 
     @source.setter
     def source(self, val: List[str]) -> None:
@@ -135,7 +139,11 @@ class Post(Resource):
 
     @property
     def tags(self) -> List[Tag]:
-        return self._generic_getter("tags")
+        return _ResourceList(
+            getter=lambda: self._generic_getter("tags"),
+            parent_resource=self,
+            property_name="tags",
+        )
 
     @tags.setter
     def tags(self, val: List[Union[Tag, str]]) -> None:
@@ -145,7 +153,11 @@ class Post(Resource):
 
     @property
     def relations(self) -> List:  # -> List[Post]
-        return self._generic_getter("relations")
+        return _ResourceList(
+            getter=lambda: self._generic_getter("relations"),
+            parent_resource=self,
+            property_name="relations",
+        )
 
     @relations.setter
     def relations(self, val: List) -> None:  # val: List[Post]
@@ -211,8 +223,12 @@ class Post(Resource):
         self._flag_setter("loop", val)
 
     @property
-    def notes(self):
-        return [PostNote(**note) for note in self._generic_getter("notes")]
+    def notes(self) -> List[PostNote]:
+        return _ResourceList(
+            getter=lambda: [PostNote(**note) for note in self._generic_getter("notes")],
+            parent_resource=self,
+            property_name="notes",
+        )
 
     @notes.setter
     def notes(self, val: List[PostNote]):

@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Callable
 import warnings
 
 from .api import API
-from .resource import Resource, ResourceNotSynchronized
+from .resource import Resource, ResourceNotSynchronized, _ResourceList
 
 
 class Tag(Resource):
@@ -98,7 +98,11 @@ class Tag(Resource):
     # Getters and Setters
     @property
     def names(self) -> List[str]:
-        return self._generic_getter("names")
+        return _ResourceList(
+            getter=lambda: self._generic_getter("names"),
+            parent_resource=self,
+            property_name="names",
+        )
 
     @names.setter
     def names(self, val: List[str]) -> None:
@@ -114,7 +118,11 @@ class Tag(Resource):
 
     @property
     def implications(self):  # -> List[Tag]
-        return self._generic_getter("implications")
+        return _ResourceList(
+            getter=lambda: self._generic_getter("implications"),
+            parent_resource=self,
+            property_name="implications",
+        )
 
     @implications.setter
     def implications(self, val: List) -> None:  # val: List[Tag]
@@ -122,7 +130,11 @@ class Tag(Resource):
 
     @property
     def suggestions(self):  # -> List[Tag]
-        return self._generic_getter("suggestions")
+        return _ResourceList(
+            getter=lambda: self._generic_getter("suggestions"),
+            parent_resource=self,
+            property_name="suggestions",
+        )
 
     @suggestions.setter
     def suggestions(self, val: List) -> None:  # val: List[Tag]
@@ -146,12 +158,6 @@ class Tag(Resource):
         if val in existing_names:
             existing_names.remove(val)
         existing_names.insert(0, val)
-        self.names = existing_names
-
-    def add_name(self, val: str) -> None:
-        existing_names = self.names
-        if val not in existing_names:
-            existing_names.append(val)
         self.names = existing_names
 
     def __str__(self) -> str:

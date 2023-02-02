@@ -1,10 +1,47 @@
 from typing import Any, Dict, List, Callable
 
+from collections.abc import MutableSequence
+
 from .api import API, FileToken
 
 
 class ResourceNotSynchronized(RuntimeError):
     pass
+
+
+class _ResourceList(MutableSequence):
+    def __init__(self, getter: Callable, parent_resource, property_name: str):
+        super().__init__()
+        self._getter = getter
+        self._parent_resource = parent_resource
+        self._property_name = property_name
+
+    def __getitem__(self, i):
+        d = self._getter()
+        return d[i]
+
+    def __setitem__(self, i, item) -> None:
+        d = self._getter()
+        d[i] = item
+        setattr(self._parent_resource, self._property_name, d)
+
+    def __delitem__(self, i) -> None:
+        d = self._getter()
+        del d[i]
+        setattr(self._parent_resource, self._property_name, d)
+
+    def __len__(self) -> int:
+        d = self._getter()
+        return len(d)
+
+    def __str__(self) -> str:
+        d = self._getter()
+        return str(d)
+
+    def insert(self, index: int, value) -> None:
+        d = self._getter()
+        d.insert(index, value)
+        setattr(self._parent_resource, self._property_name, d)
 
 
 class Resource:
