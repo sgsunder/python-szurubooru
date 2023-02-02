@@ -36,7 +36,7 @@ def _search_generic(
 ) -> Generator[Resource, None, None]:
     offset = 0
     total = None
-    with (tqdm() if show_progress_bar else _NullContextManager()) as pbar:
+    with tqdm() if show_progress_bar else _NullContextManager() as pbar:
         while True:
             urlquery = {"offset": offset, "limit": page_size, "query": search_query}
             if not eager_load:

@@ -1,7 +1,7 @@
 repos:
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.4.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -9,20 +9,20 @@ repos:
     -   id: mixed-line-ending
 
 -   repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.9
+    rev: v1.4.2
     hooks:
     -   id: remove-tabs
 
 -   repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: '23.1.0'
     hooks:
       - id: black
         types: [python]
         language_version: python3.8
         args: ['-l92']
 
--   repo: https://gitlab.com/pycqa/flake8
-    rev: '3.8.3'
+-   repo: https://github.com/pycqa/flake8
+    rev: '6.0.0'
     hooks:
     -   id: flake8
         additional_dependencies:
