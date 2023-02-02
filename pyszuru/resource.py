@@ -164,10 +164,9 @@ class Resource:
     ) -> None:
         if property_name in self._json:
             if isinstance(self._json[property_name], list):
-                if not isinstance(property_value, list):
-                    raise ValueError(
-                        f"{property_name} must be a list, not {type(property_value)}"
-                    )
+                if not hasattr(property_value, "__iter__"):
+                    raise ValueError(f"{property_name} must be an iterable")
+                property_value = list(property_value)
             self._json_new[property_name] = self._apply_transforms(
                 self._setter_transforms(), property_name, property_value
             )
