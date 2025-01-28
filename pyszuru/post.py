@@ -1,6 +1,6 @@
-from typing import Any, Union, Dict, List, Callable
-import warnings
+from typing import Any, Callable, Dict, List, Union
 
+import warnings
 from collections import namedtuple
 
 from .api import API, FileToken

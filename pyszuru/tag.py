@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Callable
+from typing import Any, Callable, Dict, List
+
 import warnings
 
 from .api import API

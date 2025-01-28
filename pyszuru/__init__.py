@@ -1,10 +1,17 @@
-from typing import List, Generator
+from typing import Generator, List
 
-from .api import API as _API, FileToken, SzurubooruHTTPError
-from .resource import Resource, ResourceNotSynchronized
+from .api import API as _API
+from .api import FileToken, SzurubooruHTTPError
 from .post import Post, PostNote
+from .resource import Resource, ResourceNotSynchronized
+from .search import (
+    SearchResult,
+    _search_generic,
+    search_by_image,
+    search_post,
+    search_tag,
+)
 from .tag import Tag
-from .search import search_tag, search_post, search_by_image, _search_generic, SearchResult
 
 
 class API(_API):
