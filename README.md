@@ -22,8 +22,7 @@ mybooru = pyszuru.API(
 ```
 
 ### Working with tags
-Note: it is reccomended to use the factory functions outlined below instead of calling the `Tag`
-constructor directly.
+Note: it is reccomended to use the factory functions outlined below instead of calling the `Tag` constructor directly.
 
 #### Get existing tag
 Get an existing tag from the booru by referencing it by name
@@ -44,8 +43,7 @@ spiderman_tag.push()
 ```
 
 ### Working with posts
-Note: it is reccomended to use the factory functions outlined below instead of calling the `Post`
-constructor directly.
+Note: it is reccomended to use the factory functions outlined below instead of calling the `Post` constructor directly.
 
 #### Get existing post
 ```python
@@ -65,19 +63,42 @@ my_new_post.tags = [marvel_comics_tag, spiderman_tag]
 my_new_post.push()
 ```
 
-### Searching
+### Working with pools
+Note: it is reccomended to use the factory functions outlined below instead of calling the `Pool` constructor directly.
 
-#### Searching across tags
+#### Get existing pool
+Get an existing pool from the booru by referencing it by name
 ```python
-unused_tags = mybooru.search_tag("usages:0")
+some_pool = mybooru.getPool("some_pool")
 ```
 
-#### Searching across posts
+#### Create new pool
+Create a new pool, must specifiy a primary name only
 ```python
+other_pool = mybooru.createPool("other_pool")
+```
+
+#### Alter properties of pool
+```python
+other_pool.posts = [my_old_post, my_new_post]
+other_pool.push()
+```
+
+
+### Searching
+
+#### Searching across tags, posts, and pools
+```python
+unused_tags = mybooru.search_tag("usages:0")
+
 for post in mybooru.search_post(
     "marvel_comics type:image special:fav", show_progress_bar=True
 ):
     wget.download(post.content)
+
+for pool in mybooru.search_pool(my_query):
+    pool.category = "coolpool"
+    pool.push()
 ```
 
 #### Reverse image search
