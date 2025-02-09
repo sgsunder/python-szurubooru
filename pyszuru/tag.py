@@ -1,8 +1,5 @@
 from typing import Any, Callable, Dict, List
 
-import warnings
-
-from .api import API
 from .resource import Resource, ResourceNotSynchronized, _ResourceList
 
 
@@ -40,35 +37,6 @@ class Tag(Resource):
         if "suggestions" in ret:
             ret["suggestions"] = [x["names"][0] for x in ret["suggestions"]]
         return ret
-
-    # Factory Methods
-    @classmethod
-    def from_id(cls, api: API, id_: str):  # -> Tag
-        warnings.warn(
-            "Tag.from_id() is deprecated, use API.getTag() instead", DeprecationWarning
-        )
-        t = cls(api, {"names": [id_]})
-        t.pull()
-        return t
-
-    @classmethod
-    def new(cls, api: API, name: str):  # -> Tag
-        warnings.warn(
-            "Tag.new() is deprecated, use API.createTag() instead", DeprecationWarning
-        )
-        # Get default tag category
-        tag_cats = [
-            x["name"]
-            for x in api._call("GET", ["tag-categories"])["results"]
-            if x["default"]
-        ]
-        assert len(tag_cats) == 1
-        default_cat = tag_cats[0]
-        # Create and return tag
-        t = cls(api, {})
-        t._json_new = {"names": [name], "category": default_cat}
-        t.push()
-        return t
 
     def merge_from(self, source, add_as_alias: bool) -> None:  # source: Tag
         """

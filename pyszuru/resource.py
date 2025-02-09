@@ -117,14 +117,6 @@ class Resource:
     def synchronized(self) -> bool:
         return bool(self._json_new)
 
-    @classmethod
-    def from_id(cls, api: API, id_: Any):  # -> Resource
-        raise NotImplementedError()
-
-    @classmethod
-    def new(cls, api: API, *args, **kwargs):  # -> Resource
-        raise NotImplementedError()
-
     @property
     def api(self):
         return self._api

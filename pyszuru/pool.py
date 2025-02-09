@@ -1,8 +1,5 @@
 from typing import Any, Callable, Dict, List
 
-import warnings
-
-from .api import API
 from .post import Post
 from .resource import Resource, _ResourceList
 
@@ -35,36 +32,6 @@ class Pool(Resource):
         if "posts" in ret:
             ret["posts"] = [x["id"] for x in ret["posts"]]
         return ret
-
-    # Factory Methods
-    @classmethod
-    def from_id(cls, api: API, id_: int):  # -> Pool
-        warnings.warn(
-            "Pool.from_id() is deprecated, use API.getPool() instead", DeprecationWarning
-        )
-        p = cls(api, {"id": id_})
-        p.pull()
-        return p
-
-    @classmethod
-    def new(
-        cls,
-        api: API,
-        name: "str | List[str]",
-        category: str,
-    ):
-        warnings.warn(
-            "Pool.new() is deprecated, use API.createPool() instead", DeprecationWarning
-        )
-        if name is not None and isinstance(name, str):
-            name = [name]
-        p = cls(api, {})
-        p._json_new = {
-            "names": name,
-            "category": category,
-        }
-        p.push()
-        return p
 
     # Getters and Setters
     @property
@@ -131,4 +98,4 @@ class Pool(Resource):
         return self.primary_name
 
     def __repr__(self) -> str:
-        return f"{self._api!r}.<Tag of name '{self.primary_name}'>"
+        return f"{self._api!r}.<Pool of name '{self.primary_name}'>"
