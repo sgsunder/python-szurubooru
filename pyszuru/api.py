@@ -1,13 +1,13 @@
-from typing import Any, Union, Dict, List, BinaryIO
+from typing import Any, BinaryIO, Dict, List, Union
 
-from base64 import b64encode
 import json
 import os
 import re
 import urllib.parse
+from base64 import b64encode
 
-from appdirs import user_data_dir
 import requests
+from appdirs import user_data_dir
 
 
 class FileToken:

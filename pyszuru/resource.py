@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Callable
+from typing import Any, Callable, Dict, List
 
 from collections.abc import MutableSequence
 
@@ -116,14 +116,6 @@ class Resource:
 
     def synchronized(self) -> bool:
         return bool(self._json_new)
-
-    @classmethod
-    def from_id(cls, api: API, id_: Any):  # -> Resource
-        raise NotImplementedError()
-
-    @classmethod
-    def new(cls, api: API, *args, **kwargs):  # -> Resource
-        raise NotImplementedError()
 
     @property
     def api(self):

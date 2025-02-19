@@ -1,15 +1,14 @@
-from typing import List, Generator
-import warnings
+from typing import Generator, List
 
+import warnings
 from collections import namedtuple
 
 from tqdm import tqdm
 
 from .api import API, FileToken
+from .post import Post
 from .resource import Resource
 from .tag import Tag
-from .post import Post
-
 
 SearchResult = namedtuple("SearchResult", ["post", "distance", "exact"])
 

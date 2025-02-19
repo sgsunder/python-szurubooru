@@ -1,7 +1,8 @@
 import os
 import re
-import setuptools
 import subprocess
+
+import setuptools
 
 
 def get_version():
